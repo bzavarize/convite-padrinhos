@@ -91,7 +91,7 @@ async def main(page: ft.Page):
     # ADICIONEI "Bruno e Ingrid" AQUI NA LISTA PARA FUNCIONAR O LOGIN
     lista_de_padrinhos = [
         "Karoline Silveira Zavarize", "Vinicius Silveira Zavarize", "Andressa Bonfim Rodrigues",
-        "Danrley Lira Ferreira", "Carlos Pereira", "Bruno e Ingrid"
+        "Danrley Lira Ferreira", "Carlos Pereira", "Bruno", "Ingrid"
     ]
 
     # --- ELEMENTOS VISUAIS ---
