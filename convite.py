@@ -82,7 +82,7 @@ async def main(page: ft.Page):
     page.scroll = "auto"
 
     lista_de_padrinhos = [
-        "Bruno Silva", "Ingrid Oliveira", "João Santos",
+        "Karoline Silveira Zavarize", "Vinicius Silveira Zavarize", "João Santos",
         "Maria Souza", "Carlos Pereira"
     ]
 
@@ -316,4 +316,4 @@ async def main(page: ft.Page):
 
 if __name__ == "__main__":
     # Mantendo run() que é mais seguro
-    ft.app(target=main, view=ft.AppView.WEB_BROWSER, assets_dir="as
+    ft.app(target=main, view=ft.AppView.WEB_BROWSER, assets_dir="assets")
