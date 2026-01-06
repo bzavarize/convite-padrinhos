@@ -57,7 +57,7 @@ async def main(page: ft.Page):
     page.title = "Convite Bruno & Ingrid"
     page.padding = 0
     page.margin = 0
-    page.bgcolor = CORES["rosa"]  # Evita fundo branco no carregamento
+    page.bgcolor = "black"  # Fundo externo escuro para destacar o convite
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
 
@@ -74,7 +74,6 @@ async def main(page: ft.Page):
                        "Andressa Bonfim Rodrigues", "Danrley Lira Ferreira",
                        "Carlos Pereira", "Bruno e Ingrid"]
 
-    # --- NOTIFICAÇÕES SNACKBAR ---
     def notificar(texto, cor):
         page.snack_bar = ft.SnackBar(content=ft.Text(texto, color="white"), bgcolor=cor)
         page.snack_bar.open = True
@@ -107,7 +106,6 @@ async def main(page: ft.Page):
     campo_nome = ft.TextField(label="Nome Completo", width=280, text_align="center", on_submit=verificar_nome)
 
     async def tela_login(e):
-        # Tenta tocar áudio na primeira interação
         if audio_player:
             try:
                 await audio_player.play()
@@ -123,7 +121,7 @@ async def main(page: ft.Page):
         ])
         page.update()
 
-    # --- LAYOUT VISUAL ---
+    # --- CONTEÚDO INICIAL ---
     coluna_cartao = ft.Column([
         ft.Image(src="casal.jpeg", height=300, border_radius=20),
         ft.Text("Casamento de\nBruno & Ingrid", size=45,
@@ -132,40 +130,59 @@ async def main(page: ft.Page):
                         on_click=tela_login, width=250, height=55)
     ], horizontal_alignment="center", spacing=20)
 
-    convite_container = ft.Container(
-        content=coluna_cartao,
-        padding=40,
-        bgcolor=CORES["cartao"],
+    # --- ESTRUTURA VISUAL RESPONSIVA ---
+    # Container centralizado que simula a tela do celular
+    convite_central = ft.Container(
+        content=ft.Stack([
+            # 1. Fundo Gradiente Dourado e Rosa
+            ft.Container(
+                gradient=ft.LinearGradient(
+                    begin=ft.Alignment(-1, -1),
+                    end=ft.Alignment(1, 1),
+                    colors=[CORES["dourado"], CORES["rosa"]]
+                ),
+                expand=True
+            ),
+            # 2. Cartão de Conteúdo Centralizado
+            ft.Container(
+                content=coluna_cartao,
+                alignment=ft.Alignment(0, 0),
+                padding=40,
+                bgcolor=CORES["cartao"],
+                border_radius=30,
+                margin=20,
+                shadow=ft.BoxShadow(blur_radius=40, color="#66000000")
+            )
+        ]),
+        width=420,  # Largura de celular no PC
+        height=800,  # Altura fixa para manter proporção
         border_radius=30,
-        width=450,
-        shadow=ft.BoxShadow(blur_radius=50, color="#66000000")
-    )
-
-    fundo_gradiente = ft.Container(
-        gradient=ft.LinearGradient(
-            begin=ft.Alignment(-1, -1),
-            end=ft.Alignment(1, 1),
-            colors=[CORES["dourado"], CORES["rosa"]]
-        ),
-        expand=True,
+        clip_behavior=ft.ClipBehavior.ANTI_ALIAS
     )
 
     petalas = [Petala(2000, 1200) for _ in range(25)]
 
-    # Montagem do Stack
+    # Montagem do Stack na página toda para o fundo e as pétalas cobrirem tudo
     page.add(
         ft.Stack([
-            fundo_gradiente,
+            # Gradiente que preenche toda a janela do navegador
+            ft.Container(
+                gradient=ft.LinearGradient(
+                    begin=ft.Alignment(-1, -1),
+                    end=ft.Alignment(1, 1),
+                    colors=[CORES["dourado"], CORES["rosa"]]
+                ),
+                expand=True
+            ),
             *petalas,
-            ft.Container(content=convite_container, alignment=ft.Alignment(0, 0), expand=True)
+            # Centraliza o "celular" no meio da tela do PC
+            ft.Container(content=convite_central, alignment=ft.Alignment(0, 0), expand=True)
         ], expand=True)
     )
 
-    # Iniciar animação
     for p in petalas:
         asyncio.create_task(p.cair())
 
 
 if __name__ == "__main__":
-    # Use run() se sua versão pedir, ou mantenha app() se funcionar
     ft.app(target=main, assets_dir="assets", view=ft.AppView.WEB_BROWSER)
